@@ -33,19 +33,6 @@ namespace Шарафутдинов41размер
         public string ProductDescription { get; set; }
         public string ProductStatus { get; set; }
         public string ProductPhoto { get; set; }
-
-        public string ProductPhotoPath
-        {
-            get
-            {
-                if (ProductPhoto != null)
-                {
-                    return "images/" + ProductPhoto;
-                }
-                else
-                    return null;
-            }
-        }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderProduct> OrderProduct { get; set; }

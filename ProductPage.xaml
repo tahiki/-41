@@ -15,6 +15,36 @@
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Margin="10" Orientation="Vertical">
+                <TextBlock Text="Кол-во выбранных"></TextBlock>
+                <TextBlock Name="currentPages"></TextBlock>
+                <TextBlock Text="из"></TextBlock>
+                <TextBlock Name="EveryPages"></TextBlock>
+            </StackPanel>
+            <StackPanel Margin="10" Orientation="Vertical">
+                <TextBlock Text="Поиск по наименованию" FontSize="12"></TextBlock>
+                <TextBox Name="TBoxSearch" TextChanged="TBoxSearch_TextChanged"
+                         Width="300" FontSize="15"></TextBox>
+            </StackPanel>
+
+            <StackPanel Margin="10" Orientation="Vertical">
+                <RadioButton GroupName="Sort" Content="По возрастанию стоимости" Checked="RadioButton_Checked" Name="RadioButton_1"></RadioButton>
+                <RadioButton GroupName="Sort" Content="По убыванию стоимости" Checked="RadioButton_Checked_1" Name="RadioButton_2"></RadioButton>
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical" Margin="10">
+                <TextBlock Text="Фильтрация по скидке" FontSize="12"></TextBlock>
+                <ComboBox Name="DiscountSort" SelectionChanged="DiscountSort_SelectionChanged"
+                          Width="100" FontSize="15">
+                    <TextBlock>Все</TextBlock>
+                    <TextBlock>0-9.99%</TextBlock>
+                    <TextBlock>10-14.99%</TextBlock>
+                    <TextBlock>15-100%</TextBlock>
+                </ComboBox>
+            </StackPanel>
+        </WrapPanel>
+        
         <ListView Name="ProductListView" Grid.Row="1" SelectionChanged="ProductListView_SelectionChanged">
             <ListView.ItemTemplate>
                 <DataTemplate>

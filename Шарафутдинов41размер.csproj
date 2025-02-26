@@ -181,6 +181,8 @@
   <ItemGroup>
     <Resource Include="res\icon.ico" />
     <Resource Include="res\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Шарафутдинов41.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Шарафутдинов41.edmx</DependentUpon>
@@ -192,6 +194,5 @@
       <LastGenOutput>Шарафутдинов41.cs</LastGenOutput>
     </Content>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
