@@ -1,0 +1,48 @@
+﻿<Window x:Class="Шарафутдинов41размер.OrderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Шарафутдинов41размер"
+        mc:Ignorable="d"
+        Title="OrderWindow" Height="450" Width="800"
+        FontFamily="Comic Sans MS">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="160"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="Дата формирования заказа" VerticalAlignment="Center"></TextBlock>
+        <DatePicker Grid.Row="0" Grid.Column="1" Width="300" DataContext="Выбор даты" HorizontalAlignment="Left"></DatePicker>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="Дата доставки заказа" VerticalAlignment="Center"></TextBlock>
+        <DatePicker Grid.Row="1" Grid.Column="1" Width="300" DataContext="Выбор даты" HorizontalAlignment="Left"></DatePicker>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="ФИО клиента" VerticalAlignment="Center"></TextBlock>
+        <TextBlock Name="FIOTB" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
+
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="Номер заказа" VerticalAlignment="Center"></TextBlock>
+        <TextBlock Grid.Row="3" Grid.Column="1" Name="OrderNumber" VerticalAlignment="Center" HorizontalAlignment="Left"></TextBlock>
+
+        <ListView Grid.Row="4" Name="OrderListView">
+            
+        </ListView>
+
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="Пункт выдачи" VerticalAlignment="Center"></TextBlock>
+        <ComboBox Grid.Row="5" Grid.Column="1">
+            <TextBlock></TextBlock>
+        </ComboBox>
+
+        <Button Name="SaveOrder" Content="Сохранить" Height="25" Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center" Click="SaveOrder_Click"></Button>
+    </Grid>
+</Window>
