@@ -25,9 +25,27 @@ namespace Шарафутдинов41размер
         int CountPage;
 
         int CurrentCountPage;
-        public ProductPage()
+        public ProductPage(User user)
         {
             InitializeComponent();
+            if (user == null)
+            {
+                FIOTB.Text = "Гость";
+                RoleTB.Text = "Гость";
+            }
+            else
+            {
+                FIOTB.Text = user.UserSurname + " " + user.UserName + " " + user.UserPatronymic;
+                switch (user.UserRole)
+                {
+                    case 1:
+                        RoleTB.Text = "Клиент"; break;
+                    case 2:
+                        RoleTB.Text = "Менеджер"; break;
+                    case 3:
+                        RoleTB.Text = "Администратор"; break;
+                }
+            }
             var currentProducts = Шарафутдинов41размерEntities.GetContext().Product.ToList();
             ProductListView.ItemsSource = currentProducts;
             CurrentCountPage = currentProducts.Count;
@@ -96,6 +114,11 @@ namespace Шарафутдинов41размер
             CurrentPageList.Clear();
             CountPage = TableList.Count;
             currentPages.Text = CountPage.ToString();
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

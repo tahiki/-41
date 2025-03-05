@@ -11,12 +11,20 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
-
-        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <StackPanel Margin="10" Orientation="Vertical">
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <StackPanel>
+                <TextBlock>Вы авторизованы как </TextBlock>
+                <TextBlock Name="FIOTB"></TextBlock>
+                <TextBlock>Роль: </TextBlock>
+                <TextBlock Name="RoleTB"></TextBlock>
+            </StackPanel>
+        </WrapPanel>
+        <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="1">
+            <StackPanel Margin="10" Orientation="Vertical" HorizontalAlignment="Left">
                 <TextBlock Text="Кол-во выбранных"></TextBlock>
                 <TextBlock Name="currentPages"></TextBlock>
                 <TextBlock Text="из"></TextBlock>
@@ -45,7 +53,12 @@
             </StackPanel>
         </WrapPanel>
         
-        <ListView Name="ProductListView" Grid.Row="1" SelectionChanged="ProductListView_SelectionChanged">
+        <ListView Name="ProductListView" Grid.Row="2" SelectionChanged="ProductListView_SelectionChanged">
+            <ListView.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Добавить к заказу" Click="MenuItem_Click"></MenuItem>
+                </ContextMenu>
+            </ListView.ContextMenu>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
