@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Шарафутдинов41размер;
 
 namespace Шарафутдинов41размер
 {
@@ -23,90 +24,116 @@ namespace Шарафутдинов41размер
         List<Product> CurrentPageList = new List<Product>();
         List<Product> TableList;
         int CountPage;
-
         int CurrentCountPage;
-        public ProductPage(User user)
+
+        List<Product> selectedProducts = new List<Product>();
+        private Order currentOrder = new Order();
+        List<OrderProduct> selectedOrderProducts = new List<OrderProduct>();
+
+
+        int newOrderId;
+
+        User _currentUser;
+        private int EveryPage { get; set; }
+        public ProductPage(User UserIn)
         {
             InitializeComponent();
-            if (user == null)
+            _currentUser = UserIn;
+            Manager.OrderBtn = OrderBtn;
+            OrderBtn.Visibility = Visibility.Hidden;
+            if (UserIn != null)
             {
-                FIOTB.Text = "Гость";
-                RoleTB.Text = "Гость";
+                NameUserTB.Text = UserIn.UserSurname + " " + UserIn.UserName + " " + UserIn.UserPatronymic + " ";
+                switch (UserIn.UserRole)
+                {
+                    case 1:
+                        RoleUserTB.Text = "Клиент";
+                        break;
+                    case 2:
+                        RoleUserTB.Text = "Менеджер";
+                        break;
+                    case 3:
+                        RoleUserTB.Text = "Администратор";
+                        break;
+                    default:
+                        RoleUserTB.Text = "Гость";
+                        break;
+                }
             }
             else
             {
-                FIOTB.Text = user.UserSurname + " " + user.UserName + " " + user.UserPatronymic;
-                switch (user.UserRole)
-                {
-                    case 1:
-                        RoleTB.Text = "Клиент"; break;
-                    case 2:
-                        RoleTB.Text = "Менеджер"; break;
-                    case 3:
-                        RoleTB.Text = "Администратор"; break;
-                }
+                NameUserTB.Text = "Гость";
+                RoleUserTB.Text = "Гость";
             }
+
+
+
             var currentProducts = Шарафутдинов41размерEntities.GetContext().Product.ToList();
             ProductListView.ItemsSource = currentProducts;
-            CurrentCountPage = currentProducts.Count;
+            ComboBoxFilter.SelectedIndex = 0;
+            CurrentCountPage = TableList.Count;
             EveryPages.Text = CurrentCountPage.ToString();
-            UpdateServices();
+            UpdateProduct();
+
         }
-        private void UpdateServices()
+
+        private void UpdateProduct()
         {
             var currentProducts = Шарафутдинов41размерEntities.GetContext().Product.ToList();
-            if (DiscountSort.SelectedIndex == 1)
+
+            if (ComboBoxFilter.SelectedIndex == 1)
             {
-                currentProducts = currentProducts.Where(p => (Convert.ToInt32(p.ProductDiscountAmount) < 10)).ToList();
+                currentProducts = currentProducts.Where(p => p.ProductDiscountAmount <= 9.99).ToList();
             }
-            if (DiscountSort.SelectedIndex == 2)
+            if (ComboBoxFilter.SelectedIndex == 2)
             {
-                currentProducts = currentProducts.Where(p => (Convert.ToInt32(p.ProductDiscountAmount) >= 10 && Convert.ToInt32(p.ProductDiscountAmount) < 15)).ToList();
+                currentProducts = currentProducts.Where(p => p.ProductDiscountAmount > 10 && p.ProductDiscountAmount < 14.99).ToList();
             }
-            if (DiscountSort.SelectedIndex == 3)
+            if (ComboBoxFilter.SelectedIndex == 3)
             {
-                currentProducts = currentProducts.Where(p => (Convert.ToInt32(p.ProductDiscountAmount) >= 15 && Convert.ToInt32(p.ProductDiscountAmount) <= 100)).ToList();
+                currentProducts = currentProducts.Where(p => p.ProductDiscountAmount >= 15).ToList();
             }
 
-            currentProducts = currentProducts.Where(p => p.ProductDescription.ToLower().Contains(TBoxSearch.Text.ToLower())).ToList();
 
-            if (RadioButton_1.IsChecked.Value)
-            {
-                currentProducts = currentProducts.OrderBy(p => p.ProductCost).ToList();
-            }
-            if (RadioButton_2.IsChecked.Value)
+
+            if (RButtonBiggist.IsChecked.Value)
             {
                 currentProducts = currentProducts.OrderByDescending(p => p.ProductCost).ToList();
             }
+
+            if (RbutttonSmallist.IsChecked.Value)
+            {
+                currentProducts = currentProducts.OrderBy(p => p.ProductCost).ToList();
+            }
+
+            currentProducts = currentProducts.Where(p => p.ProductName.ToLower().Contains(TBoxSearch.Text.ToLower())).ToList();
+
+
             ProductListView.ItemsSource = currentProducts.ToList();
+            ProductListView.ItemsSource = currentProducts;
             TableList = currentProducts;
             ChangeText();
         }
 
-
-        private void ProductListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            
-        }
-
         private void TBoxSearch_TextChanged(object sender, TextChangedEventArgs e)
         {
-            UpdateServices();
+            UpdateProduct();
+
         }
 
-        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        private void ComboBoxFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateServices();
+            UpdateProduct();
         }
 
-        private void RadioButton_Checked_1(object sender, RoutedEventArgs e)
+        private void RButtonBiggist_Checked(object sender, RoutedEventArgs e)
         {
-            UpdateServices();
+            UpdateProduct();
         }
 
-        private void DiscountSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void RbutttonSmallist_Checked(object sender, RoutedEventArgs e)
         {
-            UpdateServices();
+            UpdateProduct();
         }
 
         private void ChangeText()
@@ -119,6 +146,94 @@ namespace Шарафутдинов41размер
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
 
+
+            if (ProductListView.SelectedIndex >= 0)
+            {
+                var prod = ProductListView.SelectedItem as Product;
+
+                //int newOrderID = selectedOrderProducts.Last().Order.OrderID;
+                var newOrderProd = new OrderProduct();//новый заказ
+
+                //номер продукта в новую запись
+                newOrderProd.ProductArticleNumber = prod.ProductArticleNumber;
+                newOrderProd.ProductCount = 1;
+
+                //проверии есть ли уже такой заказ
+                var selOP = selectedOrderProducts.Where(p => Equals(p.ProductArticleNumber, prod.ProductArticleNumber));
+                //MessageBox.Show(selOP.Count().ToString());
+                if (selOP.Count() == 0)
+                {
+                    //MessageBox.Show(newOrderProd. OrderID.ToString() + " " + newOrderProd.ProductArticleNumber.ToString() + " " + newOrderProd.Quantity.ToString());
+                    selectedOrderProducts.Add(newOrderProd);
+                    selectedProducts.Add(prod);
+                    //MessageBox.Shom("колво в selecteOP = " + selectedOrderProducts.Count().ToString());
+                }
+                else
+                {
+                    foreach (OrderProduct p in selectedOrderProducts)
+                    {
+                        if (p.ProductArticleNumber == prod.ProductArticleNumber)
+                            p.ProductCount++;
+                        //MessageBox.Show("колво = " + p.Quantity.ToString());
+                    }
+                }
+
+                OrderBtn.Visibility = Visibility.Visible;
+                ProductListView.SelectedIndex = -1;
+            }
+
         }
+
+        private void BtnOrder_Click(object sender, RoutedEventArgs e)
+        {
+            selectedProducts = selectedProducts.Distinct().ToList();
+
+            // Добавьте этот код для инициализации Quantity в Product
+            foreach (var product in selectedProducts)
+            {
+                // Находим соответствующий OrderProduct для текущего Product
+                var orderProduct = selectedOrderProducts.FirstOrDefault(op =>
+                    op.ProductArticleNumber == product.ProductArticleNumber);
+
+                if (orderProduct != null)
+                {
+                    // Устанавливаем Quantity в Product на основе ProductCount из OrderProduct
+                    product.Quantity = orderProduct.ProductCount;
+                }
+                else
+                {
+                    // Если OrderProduct не найден (хотя это маловероятно), устанавливаем значение по умолчанию
+                    product.Quantity = 1;
+                }
+            }
+
+            OrderWindow orderWindow = new OrderWindow(selectedOrderProducts, selectedProducts, _currentUser);
+            bool? result = orderWindow.ShowDialog();
+
+            // Если заказ успешно сохранен (DialogResult = true)
+            if (result == true)
+            {
+                selectedProducts.Clear();
+                selectedOrderProducts.Clear();
+                ProductListView.Items.Refresh(); // Обновить отображение списка
+            }
+
+            // Обновить видимость кнопки
+            OrderBtn.Visibility = selectedProducts.Any() ? Visibility.Visible : Visibility.Hidden;
+
+            //orderWindow.ShowDialog();
+
+            // После закрытия окна:
+            if (selectedProducts.Count == 0)
+            {
+                OrderBtn.Visibility = Visibility.Hidden;
+            }
+            else
+            {
+                OrderBtn.Visibility = Visibility.Visible;
+            }
+        }
+
+
     }
 }

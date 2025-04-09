@@ -11,7 +11,8 @@ namespace Шарафутдинов41размер
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class PickUpPoint
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,14 +20,21 @@ namespace Шарафутдинов41размер
         {
             this.Order = new HashSet<Order>();
         }
-    
         public int PickUpPointID { get; set; }
         public string PickUpPointIndex { get; set; }
         public string PickUpPointCity { get; set; }
         public string PickUpPointStreet { get; set; }
         public string PickUpPointHome { get; set; }
-    
+        public string PickUpPointFull
+        {
+            get
+            {
+                return PickUpPointIndex + " " + PickUpPointCity + " " + PickUpPointStreet + " " + PickUpPointHome;
+            }
+
+        }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Order { get; set; }
     }
 }
+

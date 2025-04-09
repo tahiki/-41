@@ -19,7 +19,7 @@ namespace Шарафутдинов41размер
         {
             this.OrderProduct = new HashSet<OrderProduct>();
         }
-    
+
         public string ProductArticleNumber { get; set; }
         public string ProductName { get; set; }
         public string ProductUnit { get; set; }
@@ -31,9 +31,24 @@ namespace Шарафутдинов41размер
         public Nullable<byte> ProductDiscountAmount { get; set; }
         public int ProductQuantityInStock { get; set; }
         public string ProductDescription { get; set; }
-        public string ProductStatus { get; set; }
         public string ProductPhoto { get; set; }
-    
+        public string ProductStatus { get; set; }
+
+        public string ProductPhotoPath
+        {
+            get
+            {
+                if (ProductPhoto != null)
+                {
+                    return "images/" + ProductPhoto;
+                }
+                else
+                    return null;
+            }
+        }
+
+        public int Quantity { get; set; }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrderProduct> OrderProduct { get; set; }
     }
